@@ -28,7 +28,7 @@ def Melanger(Chemin,qcd,ttbar,W): #Chemin(str) est le chemin jusqu'au répertoir
     while Counter_qcd <= Nb_qcd or Counter_ttbar <= Nb_ttbar or Counter_W <= Nb_W:
         
         test=test+1
-        print(test)
+        print(test) #permet de vérifier la bonne avancée du code
         
         Choix =random.random() #on tire un des trois répertoires
         print(Choix)
