@@ -1,5 +1,7 @@
+# Ce code permet de mélanger les données pour obtenir un dataset identique à celui pris en argument par TransformSparse
+
 def Melanger(Chemin,qcd,ttbar,W): #Chemin(str) est le chemin jusqu'au répertoire où on va mettre le fichier avec les donnees mélangées
-#qcd, ttbar et W sont les chemins jusque là où sont les données par type de réaction (sous-dossiers de Chemin)
+#qcd, ttbar et W sont les chemins jusque là où sont les données par type de réaction
     
     HLF=[]
     Labels=[]
