@@ -197,8 +197,6 @@ def Melanger(Chemin,qcd,ttbar,W): #Chemin(str) is the path to the directory wher
     
             donnees_melangees.close()
         
-            print(Iterateur_nom)
-        
             HLF=[]
             Labels=[]
             Particles=[]
