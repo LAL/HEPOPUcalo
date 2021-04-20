@@ -1,0 +1,207 @@
+def Melanger(Chemin,qcd,ttbar,W): #Chemin(str) est le chemin jusqu'au répertoire où on va mettre le fichier avec les donnees mélangées
+#qcd, ttbar et W sont les chemins jusque là où sont les données par type de réaction (sous-dossiers de Chemin)
+    
+    HLF=[]
+    Labels=[]
+    Particles=[]
+    
+    fichiers_h5_qcd = os.listdir(qcd)
+    fichiers_h5_ttbar = os.listdir(ttbar)
+    fichiers_h5_W = os.listdir(W)
+    
+    Nb_qcd= len(fichiers_h5_qcd)
+    Nb_ttbar= len(fichiers_h5_ttbar)
+    Nb_W= len(fichiers_h5_W)
+    
+    Counter_qcd=0
+    Counter_ttbar=0
+    Counter_W=0
+    
+    Au_debut_qcd = True
+    Au_debut_ttbar = True
+    Au_debut_W = True
+    
+    test=0
+
+    while Counter_qcd <= Nb_qcd or Counter_ttbar <= Nb_ttbar or Counter_W <= Nb_W:
+        
+        test=test+1
+        print(test)
+        
+        Choix =random.random() #on tire un des trois répertoires
+        print(Choix)
+        
+        if Choix <= 1/3 : #on a choisi qcd
+            
+            if Au_debut_qcd: # Permet l'initialisation
+                
+                minicounter_qcd=0
+                
+                Un_fichier_qcd = h5py.File(qcd + "//" + fichiers_h5_qcd[Counter_qcd], "r")
+                
+                datasetHLF_qcd = Un_fichier_qcd['HLF']
+                datasetParticles_qcd = Un_fichier_qcd['Particles']
+                
+                datasetHLF_qcd_ok = datasetHLF_qcd[:,1:] #Pour supprimer l'évent ID
+                datasetParticles_qcd_ok = datasetParticles_qcd[:,:,1:]
+                
+                HLF.append(datasetHLF_qcd_ok[0])
+                Labels.append([1,0,0])
+                Particles.append(datasetParticles_qcd_ok[0])
+                
+                Au_debut_qcd=False
+                
+                minicounter_qcd = minicounter_qcd+1
+            
+            else: #On est au milieu d'un fichier...
+                
+                if minicounter_qcd < len(datasetParticles_qcd_ok): #... mais pas au bout
+                
+                    HLF.append(datasetHLF_qcd_ok[minicounter_qcd])
+                    Labels.append([1,0,0])
+                    Particles.append(datasetParticles_qcd_ok[minicounter_qcd])
+                    
+                    minicounter_qcd = minicounter_qcd+1
+                
+                else: # on arrive au bout, on ferme le fichier et on ouvre le suivant...
+                    
+                    Un_fichier_qcd.close()
+                    Counter_qcd= Counter_qcd+1
+                    
+                    if Counter_qcd < Nb_qcd: # ...s'il reste encore des fichiers
+                    
+                        minicounter_qcd=0
+                
+                        Un_fichier_qcd = h5py.File(qcd + "//" + fichiers_h5_qcd[Counter_qcd], "r")
+                
+                        datasetHLF_qcd = Un_fichier_qcd['HLF']
+                        datasetParticles_qcd = Un_fichier_qcd['Particles']
+                
+                        datasetHLF_qcd_ok = datasetHLF_qcd[:,1:]
+                        datasetParticles_qcd_ok = datasetParticles_qcd[:,:,1:]
+                
+                        HLF.append(datasetHLF_qcd_ok[0])
+                        Labels.append([1,0,0])
+                        Particles.append(datasetParticles_qcd_ok[0])
+                    
+                        minicounter_qcd = minicounter_qcd+1
+        
+        elif Choix >= 1/3: #ttbar
+            
+            if Au_debut_ttbar: # Permet l'initialisation
+                
+                minicounter_ttbar=0
+                
+                Un_fichier_ttbar = h5py.File(ttbar + "//" + fichiers_h5_ttbar[Counter_ttbar], "r")
+                
+                datasetHLF_ttbar = Un_fichier_ttbar['HLF']
+                datasetParticles_ttbar = Un_fichier_ttbar['Particles']
+                
+                datasetHLF_ttbar_ok = datasetHLF_ttbar[:,1:] #Pour supprimer l'évent ID
+                datasetParticles_ttbar_ok = datasetParticles_ttbar[:,:,1:]
+                
+                HLF.append(datasetHLF_ttbar_ok[0])
+                Labels.append([0,1,0])
+                Particles.append(datasetParticles_ttbar_ok[0])
+                
+                Au_debut_ttbar=False
+                
+                minicounter_ttbar = minicounter_ttbar+1
+            
+            else: #On est au milieu d'un fichier...
+                
+                if minicounter_ttbar < len(datasetParticles_ttbar_ok): #... mais pas au bout
+                
+                    HLF.append(datasetHLF_ttbar_ok[minicounter_ttbar])
+                    Labels.append([0,1,0])
+                    Particles.append(datasetParticles_ttbar_ok[minicounter_ttbar])
+                    
+                    minicounter_ttbar = minicounter_ttbar+1
+                
+                else: # on arrive au bout, on ferme le fichier et on ouvre le suivant...
+                    
+                    Un_fichier_ttbar.close()
+                    Counter_ttbar= Counter_ttbar+1
+                    
+                    if Counter_ttbar < Nb_ttbar: # ...s'il reste encore des fichiers
+                    
+                        minicounter_ttbar=0
+                
+                        Un_fichier_ttbar = h5py.File(ttbar + "//" + fichiers_h5_ttbar[Counter_ttbar], "r")
+                
+                        datasetHLF_ttbar = Un_fichier_ttbar['HLF']
+                        datasetParticles_ttbar = Un_fichier_ttbar['Particles']
+                
+                        datasetHLF_ttbar_ok = datasetHLF_ttbar[:,1:]
+                        datasetParticles_ttbar_ok = datasetParticles_ttbar[:,:,1:]
+                
+                        HLF.append(datasetHLF_ttbar_ok[0])
+                        Labels.append([0,1,0])
+                        Particles.append(datasetParticles_ttbar_ok[0])
+                    
+                        minicounter_ttbar = minicounter_ttbar+1
+        
+        else: #W
+            
+            if Au_debut_W: # Permet l'initialisation
+                
+                minicounter_W=0
+                
+                Un_fichier_W = h5py.File(W + "//" + fichiers_h5_W[Counter_W], "r")
+                
+                datasetHLF_W = Un_fichier_W['HLF']
+                datasetParticles_W = Un_fichier_W['Particles']
+                
+                datasetHLF_W_ok = datasetHLF_W[:,1:] #Pour supprimer l'évent ID
+                datasetParticles_W_ok = datasetParticles_W[:,:,1:]
+                
+                HLF.append(datasetHLF_W_ok[0])
+                Labels.append([0,0,1])
+                Particles.append(datasetParticles_W_ok[0])
+                
+                Au_debut_W=False
+                
+                minicounter_W = minicounter_W+1
+            
+            else: #On est au milieu d'un fichier...
+                
+                if minicounter_W < len(datasetParticles_W_ok): #... mais pas au bout
+                
+                    HLF.append(datasetHLF_W_ok[minicounter_W])
+                    Labels.append([0,0,1])
+                    Particles.append(datasetParticles_W_ok[minicounter_W])
+                    
+                    minicounter_W = minicounter_W+1
+                
+                else: # on arrive au bout, on ferme le fichier et on ouvre le suivant...
+                    
+                    Un_fichier_W.close()
+                    Counter_W= Counter_W+1
+                    
+                    if Counter_W < Nb_W: # ...s'il reste encore des fichiers
+                    
+                        minicounter_W=0
+                
+                        Un_fichier_W = h5py.File(W + "//" + fichiers_h5_W[Counter_W], "r")
+                
+                        datasetHLF_W = Un_fichier_W['HLF']
+                        datasetParticles_W = Un_fichier_W['Particles']
+                
+                        datasetHLF_W_ok = datasetHLF_W[:,1:]
+                        datasetParticles_W_ok = datasetParticles_W[:,:,1:]
+                
+                        HLF.append(datasetHLF_W_ok[0])
+                        Labels.append([0,0,1])
+                        Particles.append(datasetParticles_W_ok[0])
+                    
+                        minicounter_W = minicounter_W+1
+
+    
+    donnees_melangees = h5py.File(Chemin, "a") #On crée le fichier h5py avec les données_mélangées
+    
+    HLF = donnees_melangees.create_dataset(name='HLF', data=np.array(HLF), dtype="i8")
+    Labels = donnees_melangees.create_dataset(name='Labels', data=np.array(Labels), dtype="i8")
+    Particles = donnees_melangees.create_dataset(name='Particles', data=np.array(Particles), dtype="i8")
+    
+    donnees_melangees.close()
+            
