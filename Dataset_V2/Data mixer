@@ -188,7 +188,7 @@ def Melanger(Chemin,qcd,ttbar,W): #Chemin(str) is the path to the directory wher
             donnees_melangees = h5py.File(Chemin+'//'+'mixed_data_'+str(Iterateur_nom)+'.h5', 'a') #a h5py file is created
             #with mixed datas
             
-            HLF=HLF[:][1:]
+            HLF=HLF[:][1:] # removing the Event ID column
             Particles=Particles[:][:][1:]
     
             HLF = donnees_melangees.create_dataset(name='HLF', data=np.array(HLF), dtype="f8")
