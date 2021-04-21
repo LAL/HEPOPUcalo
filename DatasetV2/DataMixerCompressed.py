@@ -1,6 +1,6 @@
 # Description: see DataMixed
 
-def melanger2(chemin,liste_chemins,taille=1000,nb_max_events=-1):#chemin(str) is the path to the directory where the file with the mixed datas
+def melanger3(chemin,liste_chemins,taille=1000,nb_max_events=-5):#chemin(str) is the path to the directory where the file with the mixed datas
     #will be and liste_chemins=[qcd,ttbar,W] are the paths where datas are (sorted by reaction type).
     #taille sets the number of events by created file. 
     #nb_max_events sets the total number of events in the created files.
@@ -13,44 +13,46 @@ def melanger2(chemin,liste_chemins,taille=1000,nb_max_events=-1):#chemin(str) is
     liste_nb = [len(liste_fichiers_h5[0]),len(liste_fichiers_h5[1]),len(liste_fichiers_h5[2])]
     liste_counters=[0,0,0]
     liste_au_debut=[True,True,True]
-    
-    iterateur_decoupage=0
-    iterateur_nom=0
-    iterateur_events=0
-    
+    liste_iterateurs=[0,0,-1]
     liste_minicounters=[0,0,0]
     liste_typefichier=[0,1,2]
     liste_labels=[[1,0,0],[0,1,0],[0,0,1]]
     
-    while liste_counters[0] <= liste_nb[0] or liste_counters[1] <= liste_nb[1] or liste_counters[2] <= liste_nb[2]:
+    while liste_counters[0] <= liste_nb[0] or liste_counters[1] <= liste_nb[1] or liste_counters[2] <= liste_nb[2]: # if there always are files...
         
-        if nb_max_events != -1:
+        liste_iterateurs[2] = liste_iterateurs[2]+1
+        print(liste_iterateurs[2])
             
-            if iterateur_events == nb_max_events:
+        if liste_iterateurs[0]==taille or liste_iterateurs[2]==nb_max_events: # the exit files consist in many little files
             
-                donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(iterateur_nom)+'.h5', 'w') #a h5py file is created
-                #with mixed datas
+            donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(liste_iterateurs[1])+'.h5', 'w') #a h5py file is created
+            #with mixed datas
                 
-                for i in range(len(hLF)):
-                    hLF[i].pop(0)
-                    for j in range(len(particles[i])):
-                        particles[i][j]=list(particles[i][j])
-                        particles[i][j].pop(0)
+            for i in range(len(hLF)): # removing the EventID column
+                hLF[i].pop(0)
+                for j in range(len(particles[i])):
+                    particles[i][j]=list(particles[i][j])
+                    particles[i][j].pop(0)
     
-                hLFe = donnees_melangees.create_dataset(name='HLF', data=hLF, dtype="f8")
-                labelse = donnees_melangees.create_dataset(name='Labels', data=labels, dtype="f8")
-                particlese = donnees_melangees.create_dataset(name='Particles', data=particles, dtype="f8")
+            hLFe = donnees_melangees.create_dataset(name='HLF', data=hLF, dtype="f8")
+            labelse = donnees_melangees.create_dataset(name='Labels', data=labels, dtype="f8")
+            particlese = donnees_melangees.create_dataset(name='Particles', data=particles, dtype="f8")
     
-                donnees_melangees.close()
+            donnees_melangees.close()
         
+            hLF=[]
+            labels=[]
+            particles=[]
+        
+            liste_iterateurs[0]=0
+            liste_iterateurs[1]=liste_iterateurs[1]+1
+            
+            if liste_iterateurs[2]==nb_max_events:
                 break
         
-            iterateur_events = iterateur_events+1
-            print(iterateur_events)
-        
-        if iterateur_decoupage < taille: # able the cutting in many datasets
+        else:
             
-            iterateur_decoupage=iterateur_decoupage+1
+            liste_iterateurs[0]=liste_iterateurs[0]+1
             choix =random.randint(0,2) # repertories are choosen randomly 
             
             if liste_au_debut[choix]: # able the initialisation
@@ -93,27 +95,3 @@ def melanger2(chemin,liste_chemins,taille=1000,nb_max_events=-1):#chemin(str) is
                         particles.append(list(liste_typefichier[choix]['Particles'][0]))
                     
                         liste_minicounters[choix] = liste_minicounters[choix]+1
-        
-        else:
-        
-            donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(iterateur_nom)+'.h5', 'w') #a h5py file is created
-            #with mixed datas
-            
-            for i in range(len(hLF)):
-                hLF[i].pop(0)
-                for j in range(len(particles[i])):
-                    particles[i][j]=list(particles[i][j])
-                    particles[i][j].pop(0)
-    
-            hLFe = donnees_melangees.create_dataset(name='HLF', data=hLF, dtype="f8")
-            labelse = donnees_melangees.create_dataset(name='Labels', data=labels, dtype="f8")
-            particlese = donnees_melangees.create_dataset(name='Particles', data=particles, dtype="f8")
-    
-            donnees_melangees.close()
-        
-            hLF=[]
-            labels=[]
-            particles=[]
-        
-            iterateur_decoupage=0
-            iterateur_nom=iterateur_nom+1
