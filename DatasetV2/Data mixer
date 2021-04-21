@@ -40,7 +40,7 @@ def Melanger(Chemin,qcd,ttbar,W,taille=1000,Nb_max_events=-1): #Chemin(str) is t
                 donnees_melangees = h5py.File(Chemin+'//'+'mixed_data_'+str(Iterateur_nom)+'.h5', 'w') #a h5py file is created
                 #with mixed datas
                 
-                for i in range(len(HLF)):
+                for i in range(len(HLF)): # delete the "EventID" feature
                     HLF[i].pop(0)
                     for j in range(len(Particles[i])):
                         Particles[i][j]=list(Particles[i][j])
