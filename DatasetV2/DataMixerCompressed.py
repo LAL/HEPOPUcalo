@@ -49,7 +49,6 @@ def melanger3(chemin,liste_chemins,taille=1000,nb_max_events=-5):#chemin(str) is
             
             if liste_iterateurs[2]==nb_max_events:
                 break
-        
         else:
             
             liste_iterateurs[0]=liste_iterateurs[0]+1
