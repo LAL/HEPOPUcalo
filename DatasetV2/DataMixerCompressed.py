@@ -1,9 +1,9 @@
 # Description: see DataMixed
 
-def melanger3(chemin,liste_chemins,taille=1000,nb_max_events=-5):#chemin(str) is the path to the directory where the file with the mixed datas
+def melanger3(chemin,liste_chemins,taille=1000,nb_max_boucles=-5):#chemin(str) is the path to the directory where the file with the mixed datas
     #will be and liste_chemins=[qcd,ttbar,W] are the paths where datas are (sorted by reaction type).
-    #taille sets the number of events by created file. 
-    #nb_max_events sets the total number of events in the created files.
+    #taille sets the number of loops by created file made by the algorithms. 
+    #nb_max_boucles sets the total number of loops made by the algorithm.
     
     hLF=[]
     labels=[]
@@ -23,7 +23,7 @@ def melanger3(chemin,liste_chemins,taille=1000,nb_max_events=-5):#chemin(str) is
         liste_iterateurs[2] = liste_iterateurs[2]+1
         print(liste_iterateurs[2])
             
-        if liste_iterateurs[0]==taille or liste_iterateurs[2]==nb_max_events: # the exit files consist in many little files
+        if liste_iterateurs[0]==taille or liste_iterateurs[2]==nb_max_boucles: # the exit files consist in many little files
             
             donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(liste_iterateurs[1])+'.h5', 'w') #a h5py file is created
             #with mixed datas
