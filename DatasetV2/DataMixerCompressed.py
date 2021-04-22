@@ -79,12 +79,12 @@ def melanger3(chemin,liste_chemins,taille=1000,nb_max_events=-5):#chemin(str) is
                     liste_minicounters[choix] = liste_minicounters[choix]+1
                 
                 else: # when the cursor is at the end, the current file is closed and the next one is opened...
-                    
-                    liste_typefichier[choix].close()
+                   
                     liste_counters[choix]= liste_counters[choix]+1
                     
                     if liste_counters[choix]< liste_nb[choix]: # ...if there are always files
-                    
+                        
+                        liste_typefichier[choix].close()
                         liste_minicounters[choix]=0
                 
                         liste_typefichier[choix] = h5py.File(liste_chemins[choix] + "//" + liste_fichiers_h5[choix][liste_counters[choix]], "r")
