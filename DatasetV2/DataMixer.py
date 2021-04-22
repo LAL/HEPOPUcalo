@@ -1,10 +1,10 @@
 # This code takes the datasets qcd, ttbar and W (sorted by type of reaction) provided by the database of the CERN and
 # create a bunch of mixed datas that can be used by TransformArrowSparseFloat code.
 
-def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is the path to the directory where the file with the mixed datas
+def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_boucles=-1): #chemin(str) is the path to the directory where the file with the mixed datas
     #will be and qcd,ttbar and w are the paths where datas are (sorted by reaction type).
     #taille sets the number of events by created file. 
-    #nb_max_events sets the total number of events in the created files. 
+    #nb_max_boucles sets the total number of boucles mades by the algorithms.
     
     hLF=[]
     labels=[]
@@ -29,13 +29,13 @@ def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is t
     iterateur_decoupage=0
     iterateur_nom=0
     
-    iterateur_events=0
+    iterateur_boucles=0
     
     while counter_qcd <= nb_qcd or counter_ttbar <= nb_ttbar or counter_W <= nb_W:
         
-        if nb_max_events != -1:
+        if nb_max_boucles != -1:
             
-            if iterateur_events == nb_max_events:
+            if iterateur_boucles == nb_max_boucles:
             
                 donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(iterateur_nom)+'.h5', 'w') #a h5py file is created
                 #with mixed datas
@@ -54,8 +54,8 @@ def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is t
         
                 break
         
-            iterateur_events = iterateur_events+1
-            print(iterateur_events)
+            iterateur_boucles = iterateur_boucles+1
+            print(iterateur_boucles)
         
         if iterateur_decoupage <= taille: # able the cutting in many datasets
             
