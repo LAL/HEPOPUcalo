@@ -92,11 +92,12 @@ def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is t
                         minicounter_qcd = minicounter_qcd+1
                 
                     else: # when the cursor is at the end, the current file is closed and the next one is opened...
-                    
-                        un_fichier_qcd.close()
+
                         counter_qcd= counter_qcd+1
                     
                         if counter_qcd < nb_qcd: # ...if there are always files
+                            
+                            un_fichier_qcd.close()
                     
                             minicounter_qcd=0
                 
@@ -141,11 +142,12 @@ def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is t
                         minicounter_ttbar = minicounter_ttbar+1
                 
                     else:
-                    
-                        un_fichier_ttbar.close()
+                        
                         counter_ttbar= counter_ttbar+1
                     
                         if counter_ttbar < nb_ttbar:
+                            
+                            un_fichier_ttbar.close()
                     
                             minicounter_ttbar=0
                 
@@ -191,10 +193,11 @@ def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_events=-1): #chemin(str) is t
                 
                     else:
                     
-                        un_fichier_W.close()
                         counter_W= counter_W+1
                     
                         if counter_W < nb_W:
+                            
+                            un_fichier_W.close()
                     
                             minicounter_W=0
                 
