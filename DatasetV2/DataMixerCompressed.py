@@ -1,4 +1,5 @@
-# Description: see DataMixed
+# This code takes the datasets qcd, ttbar and W (sorted by type of reaction) provided by the database of the CERN and
+# create a bunch of mixed datas that can be used by TransformArrowSparseFloat code.
 
 def melanger3(chemin,liste_chemins,taille=1000,nb_max_boucles=-5):#chemin(str) is the path to the directory where the file with the mixed datas
     #will be and liste_chemins=[qcd,ttbar,W] are the paths where datas are (sorted by reaction type).
