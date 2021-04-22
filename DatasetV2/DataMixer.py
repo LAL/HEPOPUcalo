@@ -1,5 +1,5 @@
 # This code takes the datasets qcd, ttbar and W (sorted by type of reaction) provided by the database of the CERN and
-# create a bunch of mixed datas that can be used by TransformArrowSparseFloat code.
+# create a bunch of mixed datas that can be used by TransformArraySparseFloat code.
 
 def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_boucles=-1): #chemin(str) is the path to the directory where the file with the mixed datas
     #will be and qcd,ttbar and w are the paths where datas are (sorted by reaction type).
