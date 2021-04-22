@@ -3,8 +3,8 @@
 
 def melanger(chemin,qcd,ttbar,w,taille=1000,nb_max_boucles=-1): #chemin(str) is the path to the directory where the file with the mixed datas
     #will be and qcd,ttbar and w are the paths where datas are (sorted by reaction type).
-    #taille sets the number of events by created file. 
-    #nb_max_boucles sets the total number of boucles mades by the algorithms.
+    #taille sets the number of loops by created file. 
+    #nb_max_boucles sets the total number of loops mades by the algorithms.
     
     hLF=[]
     labels=[]
