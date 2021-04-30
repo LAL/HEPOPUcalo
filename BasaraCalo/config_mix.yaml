@@ -1,0 +1,11 @@
+# Config file for datamixer.py
+
+path:
+  outpath: /home/Amelie/data/hep-rousseau/refactor_data/mixed_900/
+  inpath_qcd: /home/Amelie/data/hep-rousseau/refactor_data/qcd/
+  inpath_ttbar: /home/Amelie/data/hep-rousseau/refactor_data/ttbar/
+  inpath_w: /home/Amelie/data/hep-rousseau/refactor_data/W/
+
+algorithm:
+  nevent: 900
+  maxloop: -5
