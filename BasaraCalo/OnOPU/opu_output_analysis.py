@@ -31,7 +31,7 @@ def parse_args():
         description="HEP OPU - Model Fitting", formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument(
-        "--type", type=str, default="ttbar", help="Collision type, ttbar or W"
+        "--type", type=str, default="ttbar", help="Process type, ttbar or W"
     )
     parser.add_argument(
         "--inputdir", type=str, required=True, help="Path to the output of the OPU files to be used"
@@ -50,7 +50,7 @@ def parse_args():
     return args
 
 
-def hep_analysis(collision_type, inputdir, ncomp, nevents):
+def hep_analysis(process_type, inputdir, ncomp, nevents):
     nfiles = 200
     assert nfiles * 900 > nevents, 'Not reading enough files, you must manually change nfiles'
     samples = range(nfiles)
@@ -76,7 +76,10 @@ def hep_analysis(collision_type, inputdir, ncomp, nevents):
     del opu_out, labels_out
 
     eQCD, ett, eW = range(3)
-    y_sig = y == ett
+    if process_type == 'ttbar':
+        y_sig = y == ett
+    elif process_type == 'W':
+        y_sig = y == eW
     y_bkg = y == eQCD
     Xtt = X[y_sig | y_bkg]
     ytt = y[y_sig | y_bkg] > 0
@@ -95,7 +98,7 @@ def hep_analysis(collision_type, inputdir, ncomp, nevents):
     # Creating a new repository for the experiments. Change the path to this repository if needed.
     current_time = datetime.datetime.now()
     timestr = current_time.strftime("%d%m%Y_%H%M%S")
-    exp_path = f"../results/{collision_type}_{nevents}evts_{ncomp}f_{timestr}/"
+    exp_path = f"../results/{process_type}_{nevents}evts_{ncomp}f_{timestr}/"
     os.makedirs(exp_path)
     np.savez(
         exp_path + "traintest.npz",

@@ -22,7 +22,7 @@ def parse_args():
         description="HEP OPU - Project image on OPU", formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument(
-        "--type", type=str, default="ttbar", help="Collision type, ttbar or W"
+        "--type", type=str, default="ttbar", help="Process type, ttbar or W"
     )
     parser.add_argument(
         "--ncomp", type=int, default=30000, help="Number of random features produced"
@@ -85,10 +85,8 @@ def opu_projection(type, ncomp):
                 else:
                     y += int(372 * irow.idq)
                 canvas[iimg, x:x + fimg.shape[0], y:y + fimg.shape[1]] = fimg
-
         return canvas, labels
-    #vecteur = (features) + (HLF)
-    # vecter a projeter = (features) -> vecteur projete concatenate (HLF)
+
     # Output directory, change if needed
     outdir = os.path.join("./opuout/", f"{type}_AllEvtSparse_{ncomp}_randomvariables/")
     if not os.path.exists(outdir):
