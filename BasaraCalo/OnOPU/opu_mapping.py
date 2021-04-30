@@ -3,9 +3,9 @@
 # using the appropriate quartile file. The output directory needs to be changed manually if needed.
 # Example usage:
 # python opu_mapping.py --type ttbar --ncomp 50000
-#TODO: make new dir in opuouts rather than just files to make analysis script easier to use
 
 import argparse
+import os
 
 import numpy as np
 import pandas as pd
@@ -17,26 +17,33 @@ from tqdm import tqdm
 from lightonml.projections.sklearn import OPUMap
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser("OPU transform images")
-    parser.add_argument('--type', type=str, default='ttbar', help="Collision type, ttbar or W")
-    parser.add_argument('--ncomp', type=int, default=30000, help="Number of random features desired")
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="HEP OPU - Project image on OPU", formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        "--type", type=str, default="ttbar", help="Collision type, ttbar or W"
+    )
+    parser.add_argument(
+        "--ncomp", type=int, default=30000, help="Number of random features produced"
+    )
     args = parser.parse_args()
 
-    collision_type = args.type
-    n_comp = args.ncomp
+    return args
 
-    print(f'Using {collision_type} filter.')
-    quartile_filter = pd.read_csv("../quartile_filters_" + collision_type + ".csv",
+def opu_projection(type, ncomp):
+    print(f'Using {type} filter.')
+    quartile_filter = pd.read_csv(f"../quartile_filters_{type}.csv",
                                   index_col=0)
 
     filenames = ['ECAL_ForwardN', 'ECAL_EBEE', 'ECAL_ForwardP',
                  'ECAL_Gamma_ForwardN', 'ECAL_Gamma_EBEE', 'ECAL_Gamma_ForwardP',
                  'HCAL_ForwardN', 'HCAL_HEN', 'HCAL_HB', 'HCAL_HEP', 'HCAL_ForwardP']
 
+    # Directory containing the outputs of TransformArraySparseFloat.py
     namedir = "../ArrayInputs_900/fmixed_data_"
-    print(f'OPU mapping with {n_comp} components.')
-    random_mapping = OPUMap(n_components=n_comp,
+    print(f'OPU mapping with {ncomp} components.')
+    random_mapping = OPUMap(n_components=ncomp,
                             ndims=2)
 
 
@@ -80,10 +87,13 @@ if __name__ == '__main__':
                 canvas[iimg, x:x + fimg.shape[0], y:y + fimg.shape[1]] = fimg
 
         return canvas, labels
-
+    #vecteur = (features) + (HLF)
+    # vecter a projeter = (features) -> vecteur projete concatenate (HLF)
     # Output directory, change if needed
-    outfile = "./opuout/" + f"{collision_type}_AllEvtSparse_{n_comp}_random"
-    print("Output files:", outfile)
+    outdir = os.path.join("./opuout/", f"{type}_AllEvtSparse_{ncomp}_randomvariables/")
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+    print("Output directory:", outdir)
 
     with random_mapping.opu:
         for i, filestubn in enumerate(tqdm(range(260))):
@@ -93,6 +103,11 @@ if __name__ == '__main__':
                 OPUoutput = random_mapping.fit_transform(arr)
             else:
                 OPUoutput = random_mapping.transform(arr)
-            np.savez_compressed(outfile + filestub,
+            np.savez_compressed(outdir + f"{filestub}.npz",
                                 OPU=OPUoutput,
                                 labels=labels)
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    opu_projection(args.type, args.ncomp)

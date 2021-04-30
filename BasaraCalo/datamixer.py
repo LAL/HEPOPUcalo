@@ -1,3 +1,7 @@
+# This code creates the mixed h5 datafiles from the qcd, ttbar and W repository.
+# Example usage:
+# python datamixer.py --config config_mix.yaml
+
 import os
 import h5py
 import random
