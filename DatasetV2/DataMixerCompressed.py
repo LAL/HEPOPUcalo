@@ -28,12 +28,6 @@ def melanger3(chemin,liste_chemins,taille=1000,nb_max_boucles=-5):#chemin(str) i
             
             donnees_melangees = h5py.File(chemin+'//'+'mixed_data_'+str(liste_iterateurs[1])+'.h5', 'w') #a h5py file is created
             #with mixed datas
-                
-            for i in range(len(hLF)): # removing the EventID column
-                hLF[i].pop(0)
-                for j in range(len(particles[i])):
-                    particles[i][j]=list(particles[i][j])
-                    particles[i][j].pop(0)
     
             hLFe = donnees_melangees.create_dataset(name='HLF', data=hLF, dtype="f8")
             labelse = donnees_melangees.create_dataset(name='Labels', data=labels, dtype="f8")
