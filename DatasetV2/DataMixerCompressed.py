@@ -42,7 +42,7 @@ def melanger3(chemin,liste_chemins,taille=1000,nb_max_boucles=-5):#chemin(str) i
             liste_iterateurs[0]=0
             liste_iterateurs[1]=liste_iterateurs[1]+1
             
-            if liste_iterateurs[2]==nb_max_events:
+            if liste_iterateurs[2]==nb_max_boucles:
                 break
         else:
             
