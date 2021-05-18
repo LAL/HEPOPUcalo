@@ -1,6 +1,7 @@
 def creation_megadatasets(chemin):
     
-    features = ['HT', 'MET', 'PhiMET', 'MT', 'nJets', 'bJets','LepPt', 'LepEta', 'LepPhi', 'LepIsoCh', 'LepIsoGamma','LepIsoNeu', 'LepCharge', 'LepIsEle']
+    features = [ #'EventID'
+        ,'HT', 'MET', 'PhiMET', 'MT', 'nJets', 'bJets','LepPt', 'LepEta', 'LepPhi', 'LepIsoCh', 'LepIsoGamma','LepIsoNeu', 'LepCharge', 'LepIsEle']
 
     fichiers_mixes=os.listdir(chemin)
     nb_fichiers=len(fichiers_mixes)
@@ -31,6 +32,8 @@ def creation_megadatasets(chemin):
         
     hLF=pd.DataFrame(hLF,columns=features)
     labels=pd.DataFrame(labels,columns=['label'])['label']
+    
+    #hlf.drop(column = 'EventID')
     
     return hLF,labels
     
