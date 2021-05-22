@@ -108,3 +108,9 @@ def melanger4(chemin,liste_chemins,taille=1000,nb_max_boucles=-5):#chemin(str) i
                         particles.append(list(liste_typefichier[choix]['Particles'][0]))
                     
                         liste_minicounters[choix] = liste_minicounters[choix]+1
+                        
+                        
+melanger4('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/Melange',
+          ['C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/qcd_lepFilter_13TeV',
+           'C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/ttbar_lepFilter_13Tev/ttbar_lepFilter_13TeV',
+           'C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/WInu_lepFilter_13TeV'],10000,110000) #Example of usage
