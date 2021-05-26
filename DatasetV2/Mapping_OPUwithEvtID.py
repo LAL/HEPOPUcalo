@@ -82,7 +82,7 @@ def opu_projection(typ, ncomp):
     print("Output directory:", outdir)
 
     with random_mapping.opu:
-        for i, filestubn in enumerate(tqdm(range(260))):
+        for i, filestubn in enumerate(tqdm(int(len(os.listdir('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieTASF')//13)))):
             filestub = f"{filestubn}"
             arr, labels, eventID = file2arr(filestub)
             if i == 0:
