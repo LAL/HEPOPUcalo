@@ -1,6 +1,6 @@
 def creation_megadatasets(chemin):
     
-    features = [ #'EventID'
+    features = [ 'EventID'
         ,'HT', 'MET', 'PhiMET', 'MT', 'nJets', 'bJets','LepPt', 'LepEta', 'LepPhi', 'LepIsoCh', 'LepIsoGamma','LepIsoNeu', 'LepCharge', 'LepIsEle']
 
     fichiers_mixes=os.listdir(chemin)
@@ -8,6 +8,7 @@ def creation_megadatasets(chemin):
     
     hLF=[]
     labels=[]
+    weights=[]
     
     for i in range(nb_fichiers):
         
@@ -27,28 +28,39 @@ def creation_megadatasets(chemin):
                 labels.append(1)
             else:
                 labels.append(0)
+            
+            if list(datasetLabels[j])==[0.,1.,0.]:
+                weights.append(0.003)
+                
+            elif list(datasetLabels[j])==[1.,0.,0.]:
+                weights.append(0.362)
+                
+            else:
+                weights.append(0.635)
         
         un_fichier.close()
         
     hLF=pd.DataFrame(hLF,columns=features)
     labels=pd.DataFrame(labels,columns=['label'])['label']
+    weights=pd.DataFrame(weights,columns=['weights'])
     
-    #hlf.drop(column = 'EventID')
+    hlf.drop(column = 'EventID')
     
-    return hLF,labels
+    return hLF,labels,weights
     
 ##
     
-datasetHLF,target = creation_megadatasets('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/Melange')
+datasetHLF,target,weights = creation_megadatasets('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/Melange')
 
-x_train,x_test,y_train,y_test = train_test_split(datasetHLF,target,test_size=0.3)
+x_train,x_test,y_train,y_test,weights_train,weights_test = train_test_split(datasetHLF,target,weights,test_size=0.3)
 modelTree=lgb.LGBMClassifier(max_depth=6)
 
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-modelTree.fit(x_train,y_train)
+modelTree.fit(x_train,y_train, #sample_weights=weights_train.values[:,0]
+             )
 
 accuracytest = modelTree.score(x_test,y_test)
 accuracytrain = modelTree.score(x_train,y_train)
@@ -126,12 +138,13 @@ def compare_train_test(y_pred_train, y_train, y_pred, y_test, high_low=(0,1), bi
 ##
     
 plt.close()
-compare_train_test(y_pred_train_gbm, y_train, y_pred_gbm, y_test, xlabel="LightGBM score", title="LightGBM")
+compare_train_test(y_pred_train_gbm, y_train, y_pred_gbm, y_test, xlabel="LightGBM score", title="LightGBM", #weights_train=weights_train.values[:,0]
+                   ,weights_test=weights_test.values[:,0])
 plt.savefig("Score_BDT_LightGBM.pdf")
 plt.show()
 
 lw = 2
-fpr_gbm,tpr_gbm,_ = roc_curve(y_true=y_test, y_score=y_pred_gbm)
+fpr_gbm,tpr_gbm,_ = roc_curve(y_true=y_test, y_score=y_pred_gbm,sample_weight=weights_test.values[:,0])
 plt.plot(fpr_gbm, tpr_gbm, color='darkorange',lw=lw, label='LightGBM (AUC  = {})'.format(np.round(auc_test_gbm,decimals=2)))
 plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
 plt.xlim([0.0, 1.0])
@@ -151,9 +164,9 @@ plt.show()
 
 plt.figure()
 
-ax=datasetHLF[target==0].hist(figsize=(15,12),color='b',alpha=0.5,density=True,label="B")
+ax=datasetHLF[target==0].hist(weights=weights[target==0],figsize=(15,12),color='b',alpha=0.5,density=True,label="B")
 ax=ax.flatten()[:datasetHLF.shape[1]] # to avoid error if holes in the grid of plots (like if 7 or 8 features)
-datasetHLF[target==1].hist(figsize=(15,12),color='r',alpha=0.5,density=True,ax=ax,label="S")
+datasetHLF[target==1].hist(weights=weights[target==1],figsize=(15,12),color='r',alpha=0.5,density=True,ax=ax,label="S")
 
 plt.legend(loc="best")
 plt.show()
@@ -182,3 +195,11 @@ plt.xticks(rotation=90)
 plt.title("Feature importances LightGBM")
 #plt.savefig(new_dir + "/VarImp_BDT_LightGBM.pdf",bbox_inches='tight')
 plt.show()
+
+##
+
+PI_gbm = PermulationImportance(model=modelTree, X=x_test,y=y_test,weights=weights_test.values[:,0],n_iterations=1,usePredict_poba=True, scoreFunction="amsasimov", colNames=list(features.columns.values))
+#PI_gbm.dislayResults()
+plott_gbm = PI_gbm.plotBars()
+plt.xticks(rotation=90)
+plott_gbm.show()
