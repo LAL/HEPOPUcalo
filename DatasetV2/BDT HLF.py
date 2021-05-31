@@ -1,3 +1,17 @@
+#This code takes the outputs of DatamixerWithEvtID.py and those of Creating_and_saving_scores.py and generate a BDT with them.
+
+import h5py
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score
+import lightgbm as lgb
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+import os
+from sklearn.metrics import roc_curve
+from permutationimportancephysics.PermutationImportance import PermulationImportance
+
 def creation_megadatasets(chemin):
     
     features = [ 'EventID'
@@ -43,6 +57,9 @@ def creation_megadatasets(chemin):
     hLF=pd.DataFrame(hLF,columns=features)
     labels=pd.DataFrame(labels,columns=['label'])['label']
     weights=pd.DataFrame(weights,columns=['weights'])
+    
+    scoresOPU=pd.read_csv('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/ScoresAvecEvtID/ScoresOPU.csv') #ScoresOPU
+    hLF=hLF.merge(scoresOPU,on='EventID') #Merging on EventID criteria
     
     hlf.drop(column = 'EventID')
     
