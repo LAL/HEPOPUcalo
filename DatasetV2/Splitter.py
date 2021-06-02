@@ -139,4 +139,4 @@ def run_script(process_type, inputdir, ncomp, nevents):
     save_split(process_type, X_train, y_train, X_test, y_test, weights, evid_train, evid_test)
     
 
-run_script('ttbar',''C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieOPU/'',30000,100000)
+run_script('ttbar','C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieOPU/',30000,100000)
