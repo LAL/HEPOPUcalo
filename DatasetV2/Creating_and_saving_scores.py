@@ -9,12 +9,6 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import RidgeCV, SGDClassifier
 from sklearn.metrics import roc_curve, roc_auc_score
 
-plt.close('all')
-plt.ion()
-
-sns.set(style='whitegrid', context='talk',
-        font_scale=1.2, rc={"lines.linewidth": 2.5,  'text.color': '0'})
-
 # Type considered, should be ttbar or W
 process_type = 'ttbar'
 # Repository containing the results of the experiment
