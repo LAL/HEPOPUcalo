@@ -12,9 +12,7 @@ from sklearn.metrics import roc_curve, roc_auc_score
 # Type considered, should be ttbar or W
 process_type = 'ttbar'
 # Repository containing the results of the experiment
-exp_dir = f'./results/{process_type}_24000evts_30000f_29042021_144922/'
-# The plots will be created in the experiment repository
-out_path = exp_dir + f'{process_type}_'
+exp_dir = 'C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieOPU/'
 # Number of events and of random projections to be used for the ROC curves. They must be smaller or equal to the number
 # of events and random features produced by opu_output_analysis.
 nevents = 10000
