@@ -76,7 +76,7 @@ scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-modelTree.fit(x_train,y_train,sample_weights=weights_train.values[:,0]
+modelTree.fit(x_train,y_train, #sample_weights=weights_train.values[:,0]
              )
 
 accuracytest = modelTree.score(x_test,y_test)
