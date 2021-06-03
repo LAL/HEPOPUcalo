@@ -90,7 +90,7 @@ print(accuracytrain)
 y_pred_gbm = modelTree.predict_proba(x_test)[:,1]
 y_pred_gbm = y_pred_gbm.ravel()
 y_pred_train_gbm = modelTree.predict_proba(x_train)[:,1].ravel()
-auc_test_gbm = roc_auc_score(y_true=y_test, y_score=y_pred_gbm,sample_weights=weights_test.values[:,0])
+auc_test_gbm = roc_auc_score(y_true=y_test, y_score=y_pred_gbm)
 print("auc test:",auc_test_gbm)
 print ("auc train:",roc_auc_score(y_true=y_train, y_score=y_pred_train_gbm,))
 
