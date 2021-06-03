@@ -14,24 +14,7 @@ from tqdm import tqdm
 
 from lightonml.projections.sklearn import OPUMap
 
-def opu_projection(typ, ncomp):
-    quartile_filter = pd.read_csv('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Quartile/quartile_filters_'+typ+'.csv',
-                                  index_col=0)
-
-    filenames = ['ECAL_ForwardN', 'ECAL_EBEE', 'ECAL_ForwardP',
-                 'ECAL_Gamma_ForwardN', 'ECAL_Gamma_EBEE', 'ECAL_Gamma_ForwardP',
-                 'HCAL_ForwardN', 'HCAL_HEN', 'HCAL_HB', 'HCAL_HEP', 'HCAL_ForwardP']
-
-    # Directory containing the outputs of TransformArraySparseFloat.py
-    namedir = 'C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieTASF/fmixed_data_'
-    random_mapping = OPUMap(n_components=ncomp,
-                            ndims=2, 
-                            #simulated=True,
-                            #max_n_features=50
-                           )
-
-
-    def file2arr(filestub):
+def file2arr(filestub):
         '''
         Transform the files of the 'filestub'-th generated process into a
         set of canvas and labels.
@@ -77,18 +60,30 @@ def opu_projection(typ, ncomp):
                 canvas[iimg, x:x + fimg.shape[0], y:y + fimg.shape[1]] = fimg
         return canvas, labels, eventID
 
-    # Output directory, change if needed
-    outdir = "C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieOPU/"
-    print("Output directory:", outdir)
+# Output directory, change if needed
+outdir = "C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieOPU/"
+print("Output directory:", outdir)
+    
+ncomp=30000 #number of random features produced
+typ='ttbar' #Process type ttbar or W
+    
+quartile_filter = pd.read_csv('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Quartile/quartile_filters_'+typ+'.csv',
+                                    index_col=0)
+    
+random_mapping = OPUMap(n_components=ncomp,
+                            ndims=2, 
+                            #simulated=True,
+                            #max_n_features=1003600
+                            )
 
-    with random_mapping.opu:
-        for i, filestubn in enumerate(tqdm(int(len(os.listdir('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieTASF')//13)))):
-            filestub = f"{filestubn}"
-            arr, labels, eventID = file2arr(filestub)
-            if i == 0:
-                OPUoutput = random_mapping.fit_transform(arr)
-            else:
-                OPUoutput = random_mapping.transform(arr)
-            np.savez_compressed(outdir + f"{filestub}.npz",
+with random_mapping.opu:
+    for i, filestubn in enumerate(tqdm(range((len(os.listdir('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/SortieTASF')))//13))):
+        filestub = f"{filestubn}"
+        arr, labels, eventID = file2arr(filestub)
+        if i == 0:
+            OPUoutput = random_mapping.fit_transform(arr)
+        else:
+            OPUoutput = random_mapping.transform(arr)
+        np.savez_compressed(outdir + f"{filestub}.npz",
                                 OPU=OPUoutput,
                                 labels=labels, eventID=eventID)
