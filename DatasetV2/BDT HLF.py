@@ -70,7 +70,7 @@ def creation_megadatasets(chemin):
 datasetHLF,target,weights = creation_megadatasets('C:/Users/vicru/Desktop/StageRousseauM1/PythonML/Megatestnewbase/Melange')
 
 x_train,x_test,y_train,y_test,weights_train,weights_test = train_test_split(datasetHLF,target,weights,test_size=0.3)
-modelTree=lgb.LGBMClassifier(max_depth=6)
+modelTree=lgb.LGBMClassifier()
 
 scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
