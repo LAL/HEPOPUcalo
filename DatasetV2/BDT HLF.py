@@ -76,7 +76,7 @@ scaler = StandardScaler()
 x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-modelTree.fit(x_train,y_train, #sample_weights=weights_train.values[:,0]
+modelTree.fit(x_train,y_train,sample_weights=weights_train.values[:,0]
              )
 
 accuracytest = modelTree.score(x_test,y_test)
@@ -90,7 +90,7 @@ print(accuracytrain)
 y_pred_gbm = modelTree.predict_proba(x_test)[:,1]
 y_pred_gbm = y_pred_gbm.ravel()
 y_pred_train_gbm = modelTree.predict_proba(x_train)[:,1].ravel()
-auc_test_gbm = roc_auc_score(y_true=y_test, y_score=y_pred_gbm)
+auc_test_gbm = roc_auc_score(y_true=y_test, y_score=y_pred_gbm,sample_weights=weights_test.values[:,0])
 print("auc test:",auc_test_gbm)
 print ("auc train:",roc_auc_score(y_true=y_train, y_score=y_pred_train_gbm,))
 
