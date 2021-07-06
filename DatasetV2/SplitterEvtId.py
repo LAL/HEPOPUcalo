@@ -144,7 +144,7 @@ def import_data(process_type, inputdir, ncomp, nevents):
 def save_split(process_type, X_train, y_train, X_test, y_test, weights_train, weights_test ,evid_train, evid_test):#
     # Change the path to this repository if needed.
 
-    exp_path = '/data/atlas/struillou/StageM1VictorStruillou/SortieSplitter_2_W/'
+    exp_path = '/data/atlas/struillou/StageM1VictorStruillou/SortieSplitter_2_ttbar/'
     np.savez(
         exp_path + "traintest.npz",
         X_train=X_train,
@@ -163,5 +163,5 @@ def run_script(process_type, inputdir, ncomp, nevents):
     print("Splitting...")
     save_split(process_type, X_train, y_train, X_test, y_test, weights_train, weights_test, evid_train, evid_test)
     
-run_script('W','/data/atlas/struillou/StageM1VictorStruillou/SortieOPU_2/',99999,100000)
+run_script('ttbar','/data/atlas/struillou/StageM1VictorStruillou/SortieOPU_2_ttbar/',99999,100000)
 
