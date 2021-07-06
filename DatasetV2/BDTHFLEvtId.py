@@ -84,7 +84,7 @@ def creation_megadatasets(chemin,limit):
     labels_signaux_W=pd.DataFrame(labels_signaux_W,columns=['label'])['label']
     weights=pd.DataFrame(weights,columns=['weights'])
     
-    scoresOPU=pd.read_csv('/data/atlas/struillou/StageM1VictorStruillou/ScoresOPU_W/ScoresOPU.csv')
+    scoresOPU=pd.read_csv('/data/atlas/struillou/StageM1VictorStruillou/ScoresOPU_ttbar/ScoresOPU.csv')
     
     print(scoresOPU)
     
